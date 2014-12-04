@@ -1,0 +1,39 @@
+{
+	"site" : {
+		"site_name" : "{{site_name}}",
+		"site_repository" : "{{site_repo}}"
+	},
+	"wordpress" : {
+		"site_title" : "",
+		"wordpress_user_name" : "",
+		"wordpress_user_email" : "",
+		"table_prefix" : "wp_"
+	},
+	"vagrant" : {
+		"url" : "http://127.0.0.1:8080/{{site_name}}",
+		"server" : "vagrant@127.0.0.1:2222",
+		"password" : "vagrant",
+		"path" : "/var/www/html/public/{{site_name}}",
+		"database" : "{{site_name}}",
+		"database_user" : "root",
+		"database_password" : "vagrant"
+	},
+	"stage" : {
+		"url" : "",
+		"server" : "",
+		"password" : "",
+		"path" : "",
+		"database" : "",
+		"database_user" : "",
+		"database_password" : ""
+	},
+	"production" : {
+		"url" : "",
+		"server" : "",
+		"password" : "",
+		"path" : "",
+		"database" : "",
+		"database_user" : "",
+		"database_password" : ""
+	}
+}

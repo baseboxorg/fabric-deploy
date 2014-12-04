@@ -1,0 +1,9 @@
+# Backup all databases on start up
+
+start on vagrant-mounted
+
+script
+
+	mysqldump -uroot -pvagrant --all-databases > /var/www/html/public/all_databases.sql
+
+end script

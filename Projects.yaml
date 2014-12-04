@@ -1,0 +1,11 @@
+---
+ip: "192.168.10.10"
+memory: 2048
+cpus: 1
+
+folders:
+    - map: ./Sites
+      to: /var/www/html/public
+
+
+
