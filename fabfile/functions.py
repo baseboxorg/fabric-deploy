@@ -165,6 +165,20 @@ def create_htaccess(site):
 
 	return config_file
 
+def create_stage_htaccess(site):
+    
+	config_file = '/tmp/.htaccess'
+
+	context = {
+		'sitepath' : site.server['path']
+	}
+
+	with open(config_file, 'w') as f:
+		output = render_template('_stage_htaccess', context)
+		f.write(output)
+
+	return config_file
+
 #---------------------
 # Apache Config
 #---------------------

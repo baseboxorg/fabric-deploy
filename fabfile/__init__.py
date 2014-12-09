@@ -12,6 +12,8 @@ import string
 #	Set Up Project Repository
 #----------------------------------
 
+stage = False
+
 def repo(site_name):
 
 	site = Site(site_name)
@@ -72,6 +74,10 @@ def workon_repo(site_name, repo):
 #----------------------------------
 
 def vagrant(site_name):
+
+	global stage
+	stage = False
+
 	env.site = Site(site_name)
 	env.site.vagrant(site_name)
 	env.site.wordpress(site_name)
@@ -80,6 +86,10 @@ def vagrant(site_name):
 	env.password = env.site.server['password']
 
 def stage(site_name):
+
+	global stage
+	stage = True
+
 	env.site = Site(site_name)
 	env.site.stage(site_name)
 	env.site.wordpress(site_name)
@@ -87,7 +97,11 @@ def stage(site_name):
 	env.hosts = [ env.site.server['server'] ]
 	env.password = env.site.server['password']
 
-def production(site_name):	
+def production(site_name):
+
+	global stage
+	stage = False
+	
 	env.site = Site(site_name)
 	env.site.production(site_name)
 	env.site.wordpress(site_name)
@@ -384,9 +398,16 @@ def push():
 
 def deploy():
 
+	global stage
+
 	if "127.0.0.1" not in env.hosts[0]:
 		config = create_wp_config(env.site)	
-		htaccess = create_htaccess(env.site)	
+		
+		if stage == True:
+			htaccess = create_stage_htaccess(env.site)
+		else:
+			htaccess = create_htaccess(env.site)	
+		
 		rootpath = env.site.server['path'].replace('/current', '')
 
 		with cd("%s/wp-content" % env.site.server['path']):
