@@ -433,7 +433,7 @@ def deploy():
 		with cd(env.site.server['path']):
 			# Generate htpasswd file for staging
 			if stage == True:
-				run("htpasswd -mb ./.htpasswd atomic %s" % HTPASSWD)
+				run("htpasswd -cmb ./.htpasswd atomic %s" % HTPASSWD)
 			
 			# upload config and htaccess files
 			put(config, './')
