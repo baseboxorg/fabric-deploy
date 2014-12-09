@@ -348,7 +348,7 @@ def push():
 		
 		# Clean out oldest database backup files
 
-		path_to_clean = env.site.side_dir + "/db/deploy_backups"
+		path_to_clean = env.site.site_dir + "/db/deploy_backups"
 
 		with lcd(path_to_clean):
 			local("(ls -t|head -n 15;ls)|sort|uniq -u|sed -e 's,.*,\"&\",g'|xargs rm -rf")
