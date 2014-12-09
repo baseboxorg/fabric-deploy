@@ -26,7 +26,8 @@
 		"database" : "",
 		"database_user" : "",
 		"database_password" : "",
-		"htpasswd" : ""
+		"htpasswd" : "",
+		"htaccess_extension" : ""
 	},
 	"production" : {
 		"url" : "",
@@ -36,6 +37,7 @@
 		"database" : "",
 		"database_user" : "",
 		"database_password" : "",
-		"htpasswd" : ""
+		"htpasswd" : "",
+		"htaccess_extension" : ""
 	}
 }
