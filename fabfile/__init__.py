@@ -101,7 +101,7 @@ def production(site_name):
 
 	global stage
 	stage = False
-	
+
 	env.site = Site(site_name)
 	env.site.production(site_name)
 	env.site.wordpress(site_name)
@@ -401,6 +401,9 @@ def deploy():
 	global stage
 
 	if "127.0.0.1" not in env.hosts[0]:
+		
+		# Set up variables
+
 		config = create_wp_config(env.site)	
 		
 		if stage == True:
@@ -410,9 +413,13 @@ def deploy():
 		
 		rootpath = env.site.server['path'].replace('/current', '')
 
+		# Move uploads folder for rsync
+
 		with cd("%s/wp-content" % env.site.server['path']):
 			with settings(warn_only=True):
 				run("mv uploads/ %s/uploads" % rootpath)
+
+		# Move current site to prev revision folder
 
 		with cd(rootpath):
 			with settings(warn_only=True):
@@ -421,11 +428,19 @@ def deploy():
 			
 			run("git clone --depth=1 %s current/" % env.site.repository)
 		
+		# make new htaccess and config files
+
 		with cd(env.site.server['path']):
+			# Generate htpasswd file for staging
+			if stage == True:
+				run("htpasswd -mb ./.htpasswd atomic %s" % HTPASSWD)
+			
+			# upload config and htaccess files
 			put(config, './')
 			put(htaccess, './')
 
-		
+		# uploads
+
 		with lcd(env.site.site_dir):
 
 			# Backup uploads just in case

@@ -6,6 +6,7 @@ BITBUCKET_USERNAME = ""
 BITBUCKET_PASS = ""
 WORDPRESS_VERSION = "4.0"
 THEME_REPO = ""
+HTPASSWD = ""
 
 
 PATH = os.path.dirname(os.path.abspath(__file__))
