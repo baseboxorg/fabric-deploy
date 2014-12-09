@@ -405,11 +405,7 @@ def deploy():
 		# Set up variables
 
 		config = create_wp_config(env.site)	
-		
-		if stage == True:
-			htaccess = create_stage_htaccess(env.site)
-		else:
-			htaccess = create_htaccess(env.site)	
+		htaccess = create_htaccess(env.site)	
 		
 		rootpath = env.site.server['path'].replace('/current', '')
 
@@ -431,11 +427,13 @@ def deploy():
 		# make new htaccess and config files
 
 		with cd(env.site.server['path']):
-			# Generate htpasswd file for staging
-			if stage == True:
-				run("htpasswd -cmb ./.htpasswd atomic %s" % HTPASSWD)
+			
+			# Generate htpasswd if set
+			if env.site.server['htpasswd'] not "":
+				run("htpasswd -cmb ./.htpasswd atomic %s" % env.site.server['htpasswd'])
 			
 			# upload config and htaccess files
+			
 			put(config, './')
 			put(htaccess, './')
 
