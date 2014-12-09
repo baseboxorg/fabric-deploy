@@ -316,8 +316,45 @@ def pull():
 # pushes local staged copy of database to remote site
 
 def push():
+
 	
 	with lcd(env.site.site_dir):
+
+		# Backup database before push
+
+		with cd(env.site.server['path']):
+			# Get Database
+			run('mkdir -p .db/')
+			run("mysqldump -u%(database_user)s -p'%(database_password)s' --no-create-db %(database)s > .db/%(database)s.sql"
+				% { 
+					"database_user" : env.site.server['database_user'], 
+					"database_password" : env.site.server['database_password'], 
+					"database" : env.site.server['database'] 
+				}
+			)
+
+		ts = time.time()
+		timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H:%M:%S')
+		
+		with lcd(env.site.site_dir):
+			local("mkdir -p db/deploy_backups")
+			with cd(env.site.server['path']):
+				get(".db/%s.sql" % env.site.server['database'], "db/deploy_backups/backup_%(name)s_%(timestamp)s.sql" % {"name" : env.site.server['database'], "timestamp" : timestamp })
+
+		with cd(env.site.server['path']):
+			run("rm -f .db/%s.sql" % env.site.server['database'])
+
+
+		
+		# Clean out oldest database backup files
+
+		path_to_clean = env.site.side_dir + "/db/deploy_backups"
+
+		with lcd(path_to_clean):
+			local("(ls -t|head -n 15;ls)|sort|uniq -u|sed -e 's,.*,\"&\",g'|xargs rm -rf")
+
+		
+		# Push Local database to server
 		
 		with cd(env.site.server['path']):
 			run('mkdir -p .db/')
@@ -369,6 +406,14 @@ def deploy():
 
 		
 		with lcd(env.site.site_dir):
+
+			# Backup uploads just in case
+
+			local("rm -rf uploads_backup.zip")
+			local("zip -r -X uploads_backup.zip ./wp-content/uploads")
+
+			# rsync
+
 			project.rsync_project("%s/" % rootpath, "wp-content/uploads")
 			project.rsync_project("%s/uploads/" % rootpath, "wp-content/uploads", upload=False)
 			with settings(warn_only=True):
