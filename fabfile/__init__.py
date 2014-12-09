@@ -410,7 +410,7 @@ def deploy():
 			# Backup uploads just in case
 
 			local("rm -rf uploads_backup.zip")
-			local("zip -r -X uploads_backup.zip ./wp-content/uploads")
+			local("zip -r -X db/uploads_backup.zip ./wp-content/uploads")
 
 			# rsync
 

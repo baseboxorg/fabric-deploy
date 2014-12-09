@@ -26,6 +26,7 @@ wp-content/cache/*
 wp-content/backup/*
 wp-content/bps-backup/*
 wp-config.php
+/uploads_backup.zip
 /db
 /replace
 
