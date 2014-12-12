@@ -389,8 +389,8 @@ def deploy():
 		htaccess = create_htaccess(env.site)	
 		rootpath = env.site.server['path'].replace('/current', '')
 
-		with cd("%s/wp-content" % env.site.server['path']):
-			with settings(warn_only=True):
+		with settings(warn_only=True):
+			with cd("%s/wp-content" % env.site.server['path']):
 				run("mv uploads/ %s/uploads" % rootpath)
 
 		with cd(rootpath):
